@@ -3,17 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Service Name Form</title>
+  <title>User Information Form</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Enter Service Name</h1>
-    <form id="serviceForm" action="index.html" method="get">
-      <label for="serviceName">Service Name:</label>
-      <input type="text" id="serviceName" name="serviceName" placeholder="Enter Service Name (e.g. Home Server)" required>
+    <h1>User Information Form</h1>
+    <form action="/submit-form" method="post">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
       <button type="submit">Submit</button>
     </form>
   </div>
+  <script src="user.js"></script>
 </body>
 </html>
+

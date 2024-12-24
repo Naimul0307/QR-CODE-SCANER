@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Submitted</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f9;
+    }
+    .container {
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Thank you for your submission!</h1>
+    <p>Your information has been saved successfully.</p>
+    
+    <!-- Image from query parameter -->
+    <div id="userImage"></div>
+    
+    <script>
+      // Get the image query parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const imageSrc = urlParams.get('image');
+      
+      if (imageSrc) {
+        const imgElement = document.createElement('img');
+        imgElement.src = imageSrc;
+        document.getElementById('userImage').appendChild(imgElement);
+      } else {
+        document.getElementById('userImage').innerHTML = '<p>No image found for this submission.</p>';
+      }
+    </script>
+  </div>
+</body>
+</html>
