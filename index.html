@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wi-Fi and Access QR Code Generator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>QR Code Generator</h1>
+    <p>Fill in the details to generate QR codes for Wi-Fi access or for accessing specific pages on your local server.</p>
+
+    <!-- Wi-Fi QR Code Form -->
+    <label for="ssid">Wi-Fi SSID:</label>
+    <input type="text" id="ssid" placeholder="Enter Wi-Fi name">
+
+    <label for="password">Wi-Fi Password:</label>
+    <input type="password" id="password" placeholder="Enter Wi-Fi password">
+
+    <label for="encryption">Encryption Type:</label>
+    <select id="encryption">
+      <option value="WPA">WPA/WPA2</option>
+      <option value="WEP">WEP</option>
+      <option value="">None</option>
+    </select>
+
+    <button id="generateWiFiBtn">Generate Wi-Fi QR Code</button>
+    <div id="wifiQRCode"></div>
+
+    <hr>
+
+    <!-- Access QR Code Form -->
+    <h2>Access QR Code</h2>
+    <p>Generate a QR code to access a specific page on your local server.</p>
+    <label for="pagePath">Page Path:</label>
+    <input type="text" id="pagePath" placeholder="Enter page path (e.g., /form.html)">
+
+    <button id="generateAccessBtn">Generate Access QR Code</button>
+    <div id="accessQRCode"></div>
+  </div>
+
+  <script src="qrcode.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
