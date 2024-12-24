@@ -2,9 +2,13 @@ const express = require('express');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
+const WebSocket = require('ws');
 
 const app = express();
 const port = 3000;
+
+// Create a WebSocket server
+const wss = new WebSocket.Server({ noServer: true });
 
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
@@ -34,7 +38,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Route to serve form.html
+// Route to serve form.html (where user submits their data)
 app.get('/form.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'form.html'));
 });
@@ -51,6 +55,7 @@ app.post('/submit-form', (req, res) => {
   // Save data to a JSON file
   const dataPath = path.join(__dirname, 'users.json');
   const userData = { name, email, phone };
+  const sanitizedFileName = email.replace(/[^a-zA-Z0-9]/g, '_'); // Sanitize for file matching
 
   fs.readFile(dataPath, 'utf8', (err, data) => {
     let users = [];
@@ -67,32 +72,61 @@ app.post('/submit-form', (req, res) => {
 
       console.log('User data saved successfully.');
 
-      // Find the matching image in the images folder based on name, email, or phone
+      // Find the matching image in the images folder
       const imagesFolder = path.join(__dirname, 'public/images');
-      const sanitizedFields = [name, email, phone].map(field => field.toLowerCase());
-
       const matchingFile = fs.readdirSync(imagesFolder).find((file) => {
-        const fileNameWithoutExt = path.parse(file).name.toLowerCase(); // Match without extension
-        return sanitizedFields.some(field => fileNameWithoutExt.includes(field.toLowerCase())); // Match any field
+        const fileNameWithoutExt = path.parse(file).name;
+        return fileNameWithoutExt === sanitizedFileName || fileNameWithoutExt === phone || fileNameWithoutExt === name;
       });
 
-      // Redirect to screen.html with the matching image file name
-      if (matchingFile) {
-        const imageFile = `/images/${matchingFile}`;
-        res.redirect(`/screen.html?image=${encodeURIComponent(imageFile)}`);
+      // Notify all connected WebSocket clients (mobile and PC)
+      const imageFile = matchingFile ? `/images/${matchingFile}` : '';
+      wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+          const message = {
+            action: 'show_screen',
+            image: imageFile,
+            name,
+            email,
+            phone
+          };
+          client.send(JSON.stringify(message));
+        }
+      });
+
+      // Send success message with only relevant data to mobile
+      if (req.headers['user-agent'].includes('Mobile')) {
+        res.send({ message: 'Form submitted successfully' });
       } else {
-        res.redirect(`/screen.html?image=`); // No image found, pass empty value
+        res.send({ message: 'Form submitted successfully', imageUrl: `http://${localIP}:3000/screen.html?image=${encodeURIComponent('/images/' + matchingFile)}` });
       }
     });
   });
 });
 
-// Route to serve screen.html from outside public folder
+
+// Route to serve screen.html (the page that shows image and user data)
 app.get('/screen.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'screen.html')); // Adjust the path to where your screen.html is located
+  res.sendFile(path.join(__dirname, 'screen.html'));
 });
 
-// Start the server
-app.listen(port, () => {
+// WebSocket connection handler
+wss.on('connection', (ws) => {
+  console.log('New WebSocket connection established.');
+  ws.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+  });
+
+  ws.send(JSON.stringify({ message: 'Connected to server.' }));
+});
+
+// Upgrade HTTP server to handle WebSocket connections
+app.server = app.listen(port, () => {
   console.log(`Server running at http://${localIP}:${port}`);
+});
+
+app.server.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.emit('connection', ws, request);
+  });
 });

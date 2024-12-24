@@ -13,8 +13,7 @@
       height: 100vh;
       margin: 0;
       background-color: #f4f4f9;
-    }
-    .container {
+      flex-direction: column;
       text-align: center;
     }
     h1 {
@@ -25,29 +24,50 @@
       height: auto;
       margin-top: 20px;
     }
+    .user-info {
+      margin-top: 20px;
+      text-align: left;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Thank you for your submission!</h1>
-    <p>Your information has been saved successfully.</p>
-    
-    <!-- Image from query parameter -->
-    <div id="userImage"></div>
-    
-    <script>
-      // Get the image query parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      const imageSrc = urlParams.get('image');
-      
-      if (imageSrc) {
-        const imgElement = document.createElement('img');
-        imgElement.src = imageSrc;
-        document.getElementById('userImage').appendChild(imgElement);
-      } else {
-        document.getElementById('userImage').innerHTML = '<p>No image found for this submission.</p>';
+  <h1>Thank you for your submission!</h1>
+  <p>Your information has been saved successfully.</p>
+
+  <div id="userImage"></div>
+  <div class="user-info" id="userInfo"></div>
+
+  <script>
+    // Connect to WebSocket
+    const socket = new WebSocket('ws://' + window.location.hostname + ':3000');
+
+
+    // Listen for messages from the server
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.action === 'show_screen') {
+        const imageSrc = data.image;
+        const userInfo = `
+          <strong>Name:</strong> ${data.name}<br>
+          <strong>Email:</strong> ${data.email}<br>
+          <strong>Phone:</strong> ${data.phone}
+        `;
+
+        // Show the image if available
+        if (imageSrc) {
+          const imgElement = document.createElement('img');
+          imgElement.src = imageSrc;
+          document.getElementById('userImage').appendChild(imgElement);
+        } else {
+          document.getElementById('userImage').innerHTML = '<p>No image found for this submission.</p>';
+        }
+
+        // Display the user information
+        document.getElementById('userInfo').innerHTML = userInfo;
       }
-    </script>
-  </div>
+    };
+  </script>
 </body>
 </html>

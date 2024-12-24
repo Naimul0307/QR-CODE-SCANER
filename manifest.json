@@ -1,0 +1,22 @@
+{
+    "name": "QR Code Scanner App",
+    "short_name": "QR Scanner",
+    "description": "A QR Code Scanner App for connecting to services and Wi-Fi networks.",
+    "start_url": "/screen.html",
+    "display": "standalone", 
+    "background_color": "#f4f4f9",
+    "theme_color": "#6200ea",
+    "icons": [
+      {
+        "src": "/images/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/images/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  
