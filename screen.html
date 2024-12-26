@@ -11,115 +11,66 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
-      background-color: #f4f4f9;
-      flex-direction: column;
+      background-color: #f4f4f4;
+    }
+    .container {
       text-align: center;
     }
-    h1 {
-      color: #333;
-    }
-    img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 20px;
-    }
-    .user-info {
-      margin-top: 20px;
-      text-align: left;
-      font-size: 16px;
+    #userImage {
+      margin: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Thank you for your submission!</h1>
-  <p>Your information has been saved successfully.</p>
-
-  <div id="userImage"></div>
-  <div class="user-info" id="userInfo"></div>
+  <div class="container">
+    <h1>Form Submission Data</h1>
+    <div id="userInfo"></div>
+    <div id="userImage"></div>
+  </div>
 
   <script>
-    // Connect to WebSocket
-    const socket = new WebSocket('ws://' + window.location.hostname + ':3000');
+  let socket;
 
+  function initializeWebSocket() {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      socket = new WebSocket('ws://' + window.location.hostname + ':3000');
+    }
 
-    // Listen for messages from the server
+    socket.onopen = () => {
+      console.log('WebSocket connected');
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket closed, reconnecting...');
+      setTimeout(initializeWebSocket, 1000); // Try to reconnect after 1 second
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-
       if (data.action === 'show_screen') {
-        const imageSrc = data.image;
         const userInfo = `
           <strong>Name:</strong> ${data.name}<br>
           <strong>Email:</strong> ${data.email}<br>
           <strong>Phone:</strong> ${data.phone}
         `;
-
-        // Show the image if available
-        if (imageSrc) {
-          const imgElement = document.createElement('img');
-          imgElement.src = imageSrc;
-          document.getElementById('userImage').appendChild(imgElement);
-        } else {
-          document.getElementById('userImage').innerHTML = '<p>No image found for this submission.</p>';
-        }
-
-        // Display the user information
+        // Display user info
         document.getElementById('userInfo').innerHTML = userInfo;
+
+        // Display image if available
+        if (data.image) {
+          const imgElement = document.createElement('img');
+          imgElement.src = data.image;
+          document.getElementById('userImage').appendChild(imgElement);
+        }
       }
     };
+  }
+
+  initializeWebSocket();
   </script>
 </body>
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screen</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .info {
-      margin: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-    }
-  </style>
-</head>
-<body>
-  <h1>Real-Time Data</h1>
-  <div id="dataContainer"></div>
-
-  <script>
-    const dataContainer = document.getElementById('dataContainer');
-    const ws = new WebSocket(`ws://${window.location.hostname}:3000`);
-
-    ws.onopen = () => {
-      console.log('WebSocket connection established.');
-    };
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-
-      if (message.action === 'update_screen') {
-        const { name, email, phone } = message.data;
-        dataContainer.innerHTML = `
-          <div class="info">
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-          </div>
-        `;
-      }
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket connection closed.');
-    };
-  </script>
-</body>
-</html> -->

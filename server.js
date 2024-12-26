@@ -88,7 +88,8 @@ app.post('/submit-form', (req, res) => {
             image: imageFile,
             name,
             email,
-            phone
+            phone,
+            redirect: true
           };
           client.send(JSON.stringify(message));
         }
@@ -97,13 +98,12 @@ app.post('/submit-form', (req, res) => {
       // Respond to the mobile device
       res.json({
         success: true,
-        message: 'Data Send successfully!',
-        redirect: '/form.html',
+        message: 'Data sent successfully!',
+        redirect: '/form.html',  // Ensure redirect to screen.html after successful submission
       });
     });
   });
 });
-
 
 // Route to serve screen.html (the page that shows image and user data)
 app.get('/screen.html', (req, res) => {

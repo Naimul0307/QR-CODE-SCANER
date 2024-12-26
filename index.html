@@ -11,7 +11,6 @@
     <h1>QR Code Generator</h1>
     <p>Fill in the details to generate QR codes for Wi-Fi access or for accessing specific pages on your local server.</p>
 
-    <!-- Wi-Fi QR Code Form -->
     <label for="ssid">Wi-Fi SSID:</label>
     <input type="text" id="ssid" placeholder="Enter Wi-Fi name">
 
@@ -30,9 +29,7 @@
 
     <hr>
 
-    <!-- Access QR Code Form -->
     <h2>Access QR Code</h2>
-    <p>Generate a QR code to access a specific page on your local server.</p>
     <label for="pagePath">Page Path:</label>
     <input type="text" id="pagePath" placeholder="Enter page path (e.g., /form.html)">
 
@@ -42,5 +39,37 @@
 
   <script src="qrcode.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    let socket;
+
+    // Establish WebSocket connection
+    if (!window.socket || window.socket.readyState !== WebSocket.OPEN) {
+      socket = new WebSocket('ws://' + window.location.hostname + ':3000');
+      window.socket = socket;
+    }
+
+    socket.onopen = () => {
+      console.log('WebSocket connection established!');
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      // Redirect to screen.html after receiving action from server
+      if (data.action === 'show_screen' && data.redirect) {
+        window.location.href = '/screen.html'; // Automatically navigate to screen.html
+      }
+    };
+
+    // Send WebSocket message to server when submitting form on the mobile device
+    document.getElementById('generateWiFiBtn').addEventListener('click', () => {
+      socket.send(JSON.stringify({
+        action: 'generate_qr_code',
+        ssid: document.getElementById('ssid').value,
+        password: document.getElementById('password').value,
+        encryption: document.getElementById('encryption').value
+      }));
+    });
+  </script>  
 </body>
 </html>
