@@ -33,14 +33,14 @@ function getLocalIPAddress() {
 // Get the local IP address
 const localIP = getLocalIPAddress();
 
-// Route to serve the homepage (index.html)
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'templates', 'index.html'));
 });
 
-// Route to serve form.html (where user submits their data)
+
 app.get('/form.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'form.html'));
+  res.sendFile(path.join(__dirname, 'public', 'templates', 'form.html'));
 });
 
 // Sanitize for matching file names (lowercase and remove special characters)
@@ -58,7 +58,8 @@ app.post('/submit-form', (req, res) => {
   }
 
   // Save data to a JSON file
-  const dataPath = path.join(__dirname, 'users.json');
+  const dataPath = path.join(__dirname, 'public', 'json', 'users.json');
+
   const userData = { name, email, phone };
 
   // Sanitize inputs to match the image filenames
@@ -98,6 +99,7 @@ app.post('/submit-form', (req, res) => {
             name,
             email,
             phone,
+            redirect:true,
           };
           client.send(JSON.stringify(message));
         }
@@ -113,11 +115,11 @@ app.post('/submit-form', (req, res) => {
   });
 });
 
-// Route to serve screen.html (the page that shows image and user data)
-app.get('/screen.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'screen.html'));
-});
 
+// Serve screen.html
+app.get('/screen.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'templates', 'screen.html'));
+});
 // WebSocket connection handler
 wss.on('connection', (ws) => {
   console.log('New WebSocket connection established.');

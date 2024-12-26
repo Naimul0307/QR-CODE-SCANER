@@ -1,20 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Submitted</title>
-  <link rel="stylesheet" href="screen.css">
-</head>
-<body>
-  <div class="container">
-    <h1>Form Submission Data</h1>
-    <div id="userInfo"></div>
-  </div>
-  <div id="userImage"></div>
-
-  <script>
-    let socket;
+let socket;
 
     function initializeWebSocket() {
       if (!socket || socket.readyState !== WebSocket.OPEN) {
@@ -63,6 +47,3 @@
     }
 
     initializeWebSocket();
-  </script>
-</body>
-</html>

@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wi-Fi and Access QR Code Generator</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="icon" href="../favicon.ico">
 </head>
 <body>
   <div class="container">
     <div id="wifiForm">
       <h2>Network QR Code</h2>
+      <hr>
       <label for="ssid">Wi-Fi SSID:</label>
       <input type="text" id="ssid" placeholder="Enter Wi-Fi name">
   
@@ -28,9 +30,14 @@
 
     <div id="accessForm">
       <h2>Access QR Code</h2>
-      <label for="pagePath">Page Path:</label>
-      <input type="text" id="pagePath" placeholder="Enter page path (e.g., /form.html)">
-  
+      <hr>
+
+      <label for="baseURL">Base URL (Auto-detected):</label>
+      <input type="text" id="baseURL" readonly>
+
+      <label for="pagePath">Page Name:</label>
+      <input type="text" id="pagePath" placeholder="Enter page name (e.g., form.html)">
+      
       <button id="generateAccessBtn">Generate Access QR Code</button>
     </div>
 
@@ -47,7 +54,7 @@
     <button id="goToScreenBtn" onclick="window.location.href='/screen.html'" style="display:none;">Go to Screen</button>
   </div>
 
-  <script src="qrcode.min.js"></script>
-  <script src="index.js"></script>
+  <script src="../js/qrcode.min.js"></script>
+  <script src="../js/index.js"></script>
 </body>
 </html>

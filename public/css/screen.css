@@ -10,8 +10,9 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url('background.jpg') no-repeat center center; /* Replace 'background.jpg' with your image file path */
-    background-size: cover; /* Cover 95% width and height */
+    background: url('background.jpg') no-repeat center center;
+    background-color: azure;
+    background-size: cover; 
   }
   .container {
     text-align: center;
@@ -30,7 +31,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #000;
+    background-color: #eeeeee81;
   }
   #userImage img {
     object-fit: cover;
