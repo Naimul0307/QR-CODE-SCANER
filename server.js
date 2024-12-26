@@ -7,7 +7,7 @@ const WebSocket = require('ws');
 const app = express();
 const port = 3000;
 
-// Create a WebSocket server
+// Create WebSocket server
 const wss = new WebSocket.Server({ noServer: true });
 
 // Middleware to parse JSON and URL-encoded data
@@ -43,6 +43,11 @@ app.get('/form.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'form.html'));
 });
 
+// Sanitize for matching file names (lowercase and remove special characters)
+function sanitizeString(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]/g, '_');
+}
+
 // Handle form submission and save data
 app.post('/submit-form', (req, res) => {
   const { name, email, phone } = req.body;
@@ -55,7 +60,11 @@ app.post('/submit-form', (req, res) => {
   // Save data to a JSON file
   const dataPath = path.join(__dirname, 'users.json');
   const userData = { name, email, phone };
-  const sanitizedFileName = email.replace(/[^a-zA-Z0-9]/g, '_'); // Sanitize for file matching
+
+  // Sanitize inputs to match the image filenames
+  const sanitizedName = sanitizeString(name);
+  const sanitizedEmail = sanitizeString(email);
+  const sanitizedPhone = sanitizeString(phone);
 
   fs.readFile(dataPath, 'utf8', (err, data) => {
     let users = [];
@@ -75,8 +84,8 @@ app.post('/submit-form', (req, res) => {
       // Find the matching image in the images folder
       const imagesFolder = path.join(__dirname, 'public/images');
       const matchingFile = fs.readdirSync(imagesFolder).find((file) => {
-        const fileNameWithoutExt = path.parse(file).name;
-        return fileNameWithoutExt === sanitizedFileName || fileNameWithoutExt === phone || fileNameWithoutExt === name;
+        const fileNameWithoutExt = sanitizeString(path.parse(file).name);
+        return fileNameWithoutExt === sanitizedName || fileNameWithoutExt === sanitizedPhone || fileNameWithoutExt === sanitizedEmail;
       });
 
       // Notify all connected WebSocket clients (PC)
