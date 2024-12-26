@@ -49,7 +49,7 @@ app.post('/submit-form', (req, res) => {
 
   // Validate data
   if (!name || !email || !phone) {
-    return res.status(400).send('All fields are required!');
+    return res.status(400).json({ success: false, message: 'All fields are required!' });
   }
 
   // Save data to a JSON file
@@ -67,7 +67,7 @@ app.post('/submit-form', (req, res) => {
     fs.writeFile(dataPath, JSON.stringify(users, null, 2), (err) => {
       if (err) {
         console.error('Error saving data:', err);
-        return res.status(500).send('Error saving data.');
+        return res.status(500).json({ success: false, message: 'Error saving data.' });
       }
 
       console.log('User data saved successfully.');
@@ -79,7 +79,7 @@ app.post('/submit-form', (req, res) => {
         return fileNameWithoutExt === sanitizedFileName || fileNameWithoutExt === phone || fileNameWithoutExt === name;
       });
 
-      // Notify all connected WebSocket clients (mobile and PC)
+      // Notify all connected WebSocket clients (PC)
       const imageFile = matchingFile ? `/images/${matchingFile}` : '';
       wss.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
@@ -94,12 +94,12 @@ app.post('/submit-form', (req, res) => {
         }
       });
 
-      // Send success message with only relevant data to mobile
-      if (req.headers['user-agent'].includes('Mobile')) {
-        res.send({ message: 'Form submitted successfully' });
-      } else {
-        res.send({ message: 'Form submitted successfully', imageUrl: `http://${localIP}:3000/screen.html?image=${encodeURIComponent('/images/' + matchingFile)}` });
-      }
+      // Respond to the mobile device
+      res.json({
+        success: true,
+        message: 'Data Send successfully!',
+        redirect: '/form.html',
+      });
     });
   });
 });

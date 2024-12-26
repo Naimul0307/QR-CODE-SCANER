@@ -71,3 +71,55 @@
   </script>
 </body>
 </html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .info {
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-Time Data</h1>
+  <div id="dataContainer"></div>
+
+  <script>
+    const dataContainer = document.getElementById('dataContainer');
+    const ws = new WebSocket(`ws://${window.location.hostname}:3000`);
+
+    ws.onopen = () => {
+      console.log('WebSocket connection established.');
+    };
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+
+      if (message.action === 'update_screen') {
+        const { name, email, phone } = message.data;
+        dataContainer.innerHTML = `
+          <div class="info">
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+          </div>
+        `;
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket connection closed.');
+    };
+  </script>
+</body>
+</html> -->

@@ -22,5 +22,35 @@
       <button type="submit">Submit</button>
     </form>
   </div>
+  <script>
+    const form = document.getElementById('serviceForm');
+  
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+  
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+  
+      try {
+        const response = await fetch('/submit-form', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+          alert(result.message); // Show success message
+          window.location.href = result.redirect; // Redirect to form.html
+        } else {
+          alert(result.message); // Show error message
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('An error occurred. Please try again.');
+      }
+    });
+  </script>
+  
 </body>
 </html>
