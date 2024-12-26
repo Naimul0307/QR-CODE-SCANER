@@ -4,72 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wi-Fi and Access QR Code Generator</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <div class="container">
-    <h1>QR Code Generator</h1>
-    <p>Fill in the details to generate QR codes for Wi-Fi access or for accessing specific pages on your local server.</p>
+    <div id="wifiForm">
+      <h2>Network QR Code</h2>
+      <label for="ssid">Wi-Fi SSID:</label>
+      <input type="text" id="ssid" placeholder="Enter Wi-Fi name">
+  
+      <label for="password">Wi-Fi Password:</label>
+      <input type="password" id="password" placeholder="Enter Wi-Fi password">
+  
+      <label for="encryption">Encryption Type:</label>
+      <select id="encryption">
+        <option value="WPA">WPA/WPA2</option>
+        <option value="WEP">WEP</option>
+        <option value="">None</option>
+      </select>
+  
+      <button id="generateWiFiBtn">Generate Wi-Fi QR Code</button>
+    </div>
 
-    <label for="ssid">Wi-Fi SSID:</label>
-    <input type="text" id="ssid" placeholder="Enter Wi-Fi name">
+    <div id="accessForm">
+      <h2>Access QR Code</h2>
+      <label for="pagePath">Page Path:</label>
+      <input type="text" id="pagePath" placeholder="Enter page path (e.g., /form.html)">
+  
+      <button id="generateAccessBtn">Generate Access QR Code</button>
+    </div>
 
-    <label for="password">Wi-Fi Password:</label>
-    <input type="password" id="password" placeholder="Enter Wi-Fi password">
+    <!-- QR Code container (stacked vertically) -->
+    <div class="qr-container">
+      <!-- Placeholder for titles and QR codes -->
+      <div id="wifiTitle" class="qr-code-title"></div>
+      <div id="wifiQRCode" class="qr-code"></div>
+      <div id="accessTitle" class="qr-code-title"></div>
+      <div id="accessQRCode" class="qr-code"></div>
+    </div>
 
-    <label for="encryption">Encryption Type:</label>
-    <select id="encryption">
-      <option value="WPA">WPA/WPA2</option>
-      <option value="WEP">WEP</option>
-      <option value="">None</option>
-    </select>
-
-    <button id="generateWiFiBtn">Generate Wi-Fi QR Code</button>
-    <div id="wifiQRCode"></div>
-
-    <hr>
-
-    <h2>Access QR Code</h2>
-    <label for="pagePath">Page Path:</label>
-    <input type="text" id="pagePath" placeholder="Enter page path (e.g., /form.html)">
-
-    <button id="generateAccessBtn">Generate Access QR Code</button>
-    <div id="accessQRCode"></div>
+    <!-- Single Button to go to screen.html -->
+    <button id="goToScreenBtn" onclick="window.location.href='/screen.html'" style="display:none;">Go to Screen</button>
   </div>
 
   <script src="qrcode.min.js"></script>
-  <script src="script.js"></script>
-  <script>
-    let socket;
-
-    // Establish WebSocket connection
-    if (!window.socket || window.socket.readyState !== WebSocket.OPEN) {
-      socket = new WebSocket('ws://' + window.location.hostname + ':3000');
-      window.socket = socket;
-    }
-
-    socket.onopen = () => {
-      console.log('WebSocket connection established!');
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      // Redirect to screen.html after receiving action from server
-      if (data.action === 'show_screen' && data.redirect) {
-        window.location.href = '/screen.html'; // Automatically navigate to screen.html
-      }
-    };
-
-    // Send WebSocket message to server when submitting form on the mobile device
-    document.getElementById('generateWiFiBtn').addEventListener('click', () => {
-      socket.send(JSON.stringify({
-        action: 'generate_qr_code',
-        ssid: document.getElementById('ssid').value,
-        password: document.getElementById('password').value,
-        encryption: document.getElementById('encryption').value
-      }));
-    });
-  </script>  
+  <script src="index.js"></script>
 </body>
 </html>

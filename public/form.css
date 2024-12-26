@@ -1,0 +1,128 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden; /* Disable scrolling */
+}
+
+.container {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 90%;
+  max-width: 400px; /* Default for small screens */
+  box-sizing: border-box;
+  height: auto; /* Default height for dynamic content */
+  max-height: 100vh; /* Prevent container from overflowing the viewport */
+  overflow-y: auto; /* Enable scrolling within the container if content overflows */
+}
+
+/* Label styling */
+label {
+  display: block;
+  margin-top: 10px;
+  text-align: left;
+}
+
+/* Input fields styling */
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Button styling */
+button {
+  background: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Media Query for Small Devices */
+@media screen and (max-width: 600px) {
+  body {
+    padding: 10px;
+    justify-content: flex-start; /* Align items at the top */
+  }
+
+  .container {
+    width: 100%;
+    padding: 15px;
+    box-shadow: none;
+  }
+
+  input,
+  select {
+    padding: 8px;
+  }
+
+  button {
+    padding: 10px;
+  }
+}
+
+/* Media Query for Large Devices (1080x1920) */
+@media screen and (min-width: 1080px) and (min-height: 1920px) {
+  .container {
+    max-width: 600px;
+    padding: 40px;
+  }
+
+  input,
+  select {
+    padding: 15px;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 15px 20px;
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 2rem; /* Larger heading */
+  }
+}
+
+/* Media Query for Extra-Large Screens (Desktops, Landscape Tablets) */
+@media screen and (min-width: 1280px) {
+  .container {
+    max-width: 700px;
+    padding: 50px;
+  }
+
+  input,
+  select {
+    padding: 15px;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 15px 25px;
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 2.5rem; /* Larger heading */
+  }
+}

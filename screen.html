@@ -4,29 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Form Submitted</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f4f4f4;
-    }
-    .container {
-      text-align: center;
-    }
-    #userImage {
-      margin: 20px;
-    }
-  </style>
+  <link rel="stylesheet" href="screen.css">
 </head>
 <body>
   <div class="container">
     <h1>Form Submission Data</h1>
     <div id="userInfo"></div>
-    <div id="userImage"></div>
   </div>
+  <div id="userImage"></div>
 
   <script>
     let socket;
@@ -52,12 +37,16 @@
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.action === 'show_screen') {
+          // Clear previous content (if any)
+          document.getElementById('userInfo').innerHTML = '';
+          document.getElementById('userImage').innerHTML = '';
+
+          // Display user info
           const userInfo = `
             <strong>Name:</strong> ${data.name}<br>
             <strong>Email:</strong> ${data.email}<br>
             <strong>Phone:</strong> ${data.phone}
           `;
-          // Display user info
           document.getElementById('userInfo').innerHTML = userInfo;
 
           // Display image if available
@@ -65,7 +54,6 @@
             const imgElement = document.createElement('img');
             imgElement.src = data.image;
             imgElement.alt = 'User Image'; // Provide an alt text for the image
-            imgElement.style.maxWidth = '300px'; // Optional, to limit image size
             document.getElementById('userImage').appendChild(imgElement);
           } else {
             document.getElementById('userImage').innerHTML = 'No image available.';

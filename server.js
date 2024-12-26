@@ -98,7 +98,6 @@ app.post('/submit-form', (req, res) => {
             name,
             email,
             phone,
-            redirect: true
           };
           client.send(JSON.stringify(message));
         }
