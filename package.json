@@ -1,17 +1,20 @@
 {
   "name": "qr-code-scaner",
   "version": "1.0.0",
-  "main": "script.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "prestart": "node update-env.js",
+    "start": "npm run start-server && npx electron .",
+    "start-server": "node server.js",
+    "package-win": "electron-packager . qr-code-scaner --platform=win32 --arch=x64 --out=dist --electron-version=33.2.1 --icon=favicon.ico --overwrite --files \"server.js,**/*\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-packager": "^17.1.2"
   }
 }

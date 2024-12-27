@@ -3,9 +3,10 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 const WebSocket = require('ws');
+require('dotenv').config();
 
 const app = express();
-const port = 3000;
+const defaultPort = parseInt(process.env.PORT, 10) || 3000;
 
 // Create WebSocket server
 const wss = new WebSocket.Server({ noServer: true });
@@ -13,6 +14,15 @@ const wss = new WebSocket.Server({ noServer: true });
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware to prevent caching (force latest static files)
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Surrogate-Control', 'no-store');
+  next();
+});
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -30,14 +40,23 @@ function getLocalIPAddress() {
   return 'localhost';
 }
 
+// Function to find an available port
+function findAvailablePort(port) {
+  return new Promise((resolve, reject) => {
+    const server = app.listen(port, () => {
+      server.close(() => resolve(port)); // Port is available
+    });
+    server.on('error', () => resolve(findAvailablePort(port + 1))); // Try next port if this one fails
+  });
+}
+
 // Get the local IP address
 const localIP = getLocalIPAddress();
 
-
+// Routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'templates', 'index.html'));
 });
-
 
 app.get('/form.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'templates', 'form.html'));
@@ -99,7 +118,7 @@ app.post('/submit-form', (req, res) => {
             name,
             email,
             phone,
-            redirect:true,
+            redirect: true,
           };
           client.send(JSON.stringify(message));
         }
@@ -109,17 +128,17 @@ app.post('/submit-form', (req, res) => {
       res.json({
         success: true,
         message: 'Data sent successfully!',
-        redirect: '/form.html',  // Ensure redirect to screen.html after successful submission
+        redirect: '/form.html', // Ensure redirect to screen.html after successful submission
       });
     });
   });
 });
 
-
 // Serve screen.html
 app.get('/screen.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'templates', 'screen.html'));
 });
+
 // WebSocket connection handler
 wss.on('connection', (ws) => {
   console.log('New WebSocket connection established.');
@@ -131,12 +150,14 @@ wss.on('connection', (ws) => {
 });
 
 // Upgrade HTTP server to handle WebSocket connections
-app.server = app.listen(port, () => {
-  console.log(`Server running at http://${localIP}:${port}`);
-});
+findAvailablePort(defaultPort).then((port) => {
+  const server = app.listen(port, () => {
+    console.log(`Server running at http://${localIP}:${port}`);
+  });
 
-app.server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, (ws) => {
-    wss.emit('connection', ws, request);
+  server.on('upgrade', (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit('connection', ws, request);
+    });
   });
 });
