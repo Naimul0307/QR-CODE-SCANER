@@ -1,0 +1,15 @@
+QR_CODE_SCANER/
+├── node_modules/
+├── public/
+│   ├── templates/
+│   ├── css/
+│   ├── js/
+│   └── json/
+│       └── user.json
+├──  package-loack.json
+├── package.json
+└── server.js
+
+install this package need to donwlode results in excle file
+npm install
+npm install concurrently

@@ -16,8 +16,11 @@
       <input type="text" id="ssid" placeholder="Enter Wi-Fi name">
   
       <label for="password">Wi-Fi Password:</label>
-      <input type="password" id="password" placeholder="Enter Wi-Fi password">
-  
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Enter Wi-Fi password">
+        <span id="togglePassword" class="eye-icon">&#128065;</span>
+      </div>
+
       <label for="encryption">Encryption Type:</label>
       <select id="encryption">
         <option value="WPA">WPA/WPA2</option>

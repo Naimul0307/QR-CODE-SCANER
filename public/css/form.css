@@ -1,20 +1,26 @@
-body {
-  font-family: Arial, sans-serif;
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  background: url('background.jpg') no-repeat center center;
+  overflow: hidden; /* Disable scrolling for all screen sizes */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: url('../background/ipad.jpg') no-repeat center center;
   background-color: azure;
-  background-size: cover; 
+  background-size: cover;
+  background-attachment: fixed;
   color: #333;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden; /* Disable scrolling */
 }
 
+
 .container {
-  background: #ffffff;
+  background: #ffffff54;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -23,7 +29,7 @@ body {
   max-width: 400px; /* Default for small screens */
   box-sizing: border-box;
   height: auto; /* Default height for dynamic content */
-  max-height: 100vh; /* Prevent container from overflowing the viewport */
+  max-height: 90vh; /* Prevent container from overflowing the viewport */
   overflow-y: auto; /* Enable scrolling within the container if content overflows */
 }
 
@@ -64,7 +70,8 @@ button:hover {
 @media screen and (max-width: 600px) {
   body {
     padding: 10px;
-    justify-content: flex-start; /* Align items at the top */
+    justify-content: flex-start;
+    background-position: top center;
   }
 
   .container {

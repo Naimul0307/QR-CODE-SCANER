@@ -1,41 +1,47 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: url('background.jpg') no-repeat center center;
-    background-color: azure;
-    background-size: cover; 
-  }
-  .container {
-    text-align: center;
-  }
-  #userInfo {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    color: #b9b2b2dc;
-  }
-  #userImage {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #eeeeee81;
-  }
-  #userImage img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('../background/background.jpg') no-repeat center center;
+  background-size: cover; /* Ensure the image covers the full viewport */
+  background-attachment: fixed; /* Keeps the background image fixed during scrolling */
+  background-color: azure; /* Fallback color for better UX */
+  overflow: hidden; /* Prevent scrolling if needed */
+}
+
+.container {
+  text-align: center;
+}
+
+#userInfo {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #b9b2b2dc;
+}
+
+#userImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #eeeeee81;
+}
+
+#userImage img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+}

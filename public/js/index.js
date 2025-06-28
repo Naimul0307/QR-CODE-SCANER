@@ -111,3 +111,16 @@ document.getElementById('generateAccessBtn').addEventListener('click', () => {
   generateAccessQRCode();
   document.getElementById('accessForm').style.display = 'none'; // Hide Access form
 });
+
+const passwordInput = document.getElementById('password');
+const togglePassword = document.getElementById('togglePassword');
+
+togglePassword.addEventListener('click', () => {
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    togglePassword.textContent = '\u{1F441}\u{FE0E}'; // open eye emoji
+  } else {
+    passwordInput.type = 'password';
+    togglePassword.textContent = '\u{1F441}'; // closed eye emoji (same eye icon)
+  }
+});

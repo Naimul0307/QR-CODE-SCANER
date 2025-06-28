@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: url('background.jpg') no-repeat center center;
+    background: url('../background/background.jpg') no-repeat center center;
     background-color: azure;
     background-size: cover; 
     color: #333;
@@ -72,7 +72,7 @@ body {
     margin: 10px 0;
   }
   
-  #goToScreenBtn {
+  #goToScreenBtn,#goToFormBtn {
     margin-top: 40px; /* Padding between QR codes and button */
   }
   
@@ -99,3 +99,32 @@ body {
     }
   }
   
+
+.password-wrapper {
+  position: relative;
+  width: 90%; /* match input width */
+  margin-top: 5px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 35px; /* space for eye icon */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  font-size: 18px;
+  color: #555;
+}
